@@ -84,3 +84,7 @@ h1 {
   color: #fff;
   cursor: pointer;
 }
+.error-msg {
+  color: red;
+  margin-top: 10px;
+}

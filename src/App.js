@@ -1,5 +1,3 @@
-// 
-
 import React, { useState } from "react";
 import "./App.css";
 
@@ -7,17 +5,22 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSearch = async () => {
+    setError(""); // Clear previous error message
     setLoading(true);
     try {
       const response = await fetch(
         `https://restcountries.com/v3.1/currency/${searchTerm}`
       );
+      if (!response.ok) {
+        throw new Error("Currency not found. Please try again.");
+      }
       const data = await response.json();
       setCountries(data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      setError(error.message); // Set error message
     }
     setLoading(false);
   };
@@ -37,8 +40,11 @@ function App() {
             }
           }}
         />
-        <button className="search-button" onClick={handleSearch}>Search</button>
+        <button className="search-button" onClick={handleSearch}>
+          Search
+        </button>
       </div>
+      {error && <p className="error-msg">{error}</p>}
       {loading && <p>Loading...</p>}
       <div className="country-list">
         {Array.isArray(countries) &&
